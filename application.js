@@ -25,6 +25,10 @@ app.use(express.static(__dirname + '/public'));
 app.use(mbaasExpress.fhmiddleware());
 
 // fhlint-begin: custom-routes
+app.get('/', function (req, res) {
+  res.send('GET request to homepage');
+});
+
 app.use('/hello', require('./lib/overrider.js')());
 // fhlint-end
 
