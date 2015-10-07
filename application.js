@@ -25,11 +25,16 @@ app.use(express.static(__dirname + '/public'));
 app.use(mbaasExpress.fhmiddleware());
 
 // fhlint-begin: custom-routes
-app.get('/', function (req, res) {
-  res.send('GET request to homepage');
+app.get('/mbaas/forms/:appId/:formId', function(req, res) {
+  $fh.forms.getForm({
+     "_id": req.params.formId
+   }, function (err, form) {
+     if (err) return res.status(500).json(err);
+     return res.json(form);
+   });
 });
 
-app.use('/hello', require('./lib/overrider.js')());
+//app.use('/hello', require('./lib/overrider.js')());
 // fhlint-end
 
 // Important that this is last!
