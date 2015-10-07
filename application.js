@@ -30,6 +30,7 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res) {
      "_id": req.params.formId
    }, function (err, form) {
      if (err) return res.status(500).json(err);
+     console.log("Retrieved form: " + JSON.stringify(form)); 
      return res.json(form);
    });
 });
