@@ -25,7 +25,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(mbaasExpress.fhmiddleware());
 
 // fhlint-begin: custom-routes
-app.get('/hello/mbaas/forms/:appId/:formId', function(req, res) {
+app.get('/mbaas/forms/:appId/:formId', function(req, res) {
   console.log("Lookup form: " + req.params.formId); 
   mbaasApi.forms.getForm({
      "_id": req.params.formId
