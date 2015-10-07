@@ -14,17 +14,6 @@ var app = express();
 // Enable CORS for all requests
 app.use(cors());
 
-// Note: the order which we add middleware to Express here is important!
-app.use('/sys', mbaasExpress.sys(securableEndpoints));
-app.use('/mbaas', mbaasExpress.mbaas);
-
-// allow serving of static files from the public directory
-app.use(express.static(__dirname + '/public'));
-
-// Note: important that this is added just before your own Routes
-app.use(mbaasExpress.fhmiddleware());
-
-// fhlint-begin: custom-routes
 app.get('/mbaas/forms/:appId/:formId', function(req, res) {
   console.log("Lookup form: " + req.params.formId); 
   mbaasApi.forms.getForm({
@@ -37,6 +26,17 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res) {
    });
 });
 
+// Note: the order which we add middleware to Express here is important!
+app.use('/sys', mbaasExpress.sys(securableEndpoints));
+app.use('/mbaas', mbaasExpress.mbaas);
+
+// allow serving of static files from the public directory
+app.use(express.static(__dirname + '/public'));
+
+// Note: important that this is added just before your own Routes
+app.use(mbaasExpress.fhmiddleware());
+
+// fhlint-begin: custom-routes
 //app.use('/hello', require('./lib/overrider.js')());
 // fhlint-end
 
