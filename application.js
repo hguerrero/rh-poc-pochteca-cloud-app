@@ -14,6 +14,7 @@ var app = express();
 // Enable CORS for all requests
 app.use(cors());
 
+// Note: add this first to override mbaas api
 app.get('/mbaas/forms/:appId/:formId', function(req, res) {
   console.log("Lookup form: " + req.params.formId); 
   mbaasApi.forms.getForm({
