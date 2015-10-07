@@ -26,6 +26,7 @@ app.use(mbaasExpress.fhmiddleware());
 
 // fhlint-begin: custom-routes
 app.get('/mbaas/forms/:appId/:formId', function(req, res) {
+  console.log("Lookup form: " + req.params.formId); 
   $fh.forms.getForm({
      "_id": req.params.formId
    }, function (err, form) {
