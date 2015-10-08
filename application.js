@@ -27,7 +27,7 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
       _.each(form.pages, function(page, index, list){
         _.each(page.fields, function(field, index, list){
           if (field.type == 'dropdown') {
-            var fieldCode = _.rest(field.fieldCode.toLowerCase());
+            var fieldCode = field.fieldCode.toLowerCase().slice(1);
             //var options = field.fieldOptions.definition.options;
             console.log("Searching data for " + fieldCode);
             var options = [];
