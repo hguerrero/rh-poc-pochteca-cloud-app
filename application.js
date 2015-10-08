@@ -4,6 +4,7 @@ var mbaasExpress = mbaasApi.mbaasExpress();
 var cors = require('cors');
 var _ = require('underscore');
 var async = require('async');
+var events = require('events');
 
 // list the endpoints which you want to make securable here
 var securableEndpoints;
