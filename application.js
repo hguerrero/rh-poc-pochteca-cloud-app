@@ -33,7 +33,7 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
           console.log(JSON.stringify(data));
         }
      });
-     console.log("Retrieved form: " + JSON.stringify(form); 
+     console.log("Retrieved form: " + JSON.stringify(form)); 
      return res.json(form);
     });
   } else {
