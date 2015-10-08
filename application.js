@@ -74,10 +74,18 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
 });
 
 var submissionEventListener = new events.EventEmitter();
+
+submissionEventListener.on('submissionStarted', function(params){
+  var submissionId = params.submissionId;
+  var submissionStartedTimestamp = params.submissionStartedTimestamp;
+  console.log("Submission with ID " + submissionId + " has started at " + submissionStartedTimestamp);
+});
+
 submissionEventListener.on('submissionComplete', function(submission){
   console.log('New submission received: ');
   console.log(submission);
 });
+
 mbaasApi.forms.registerListener(submissionEventListener, function(err){});
 
 // Note: the order which we add middleware to Express here is important!
