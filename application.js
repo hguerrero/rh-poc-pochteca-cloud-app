@@ -22,7 +22,7 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
      "_id": req.params.formId
     }, function (err, form) {
      if (err) return res.status(500).json(err);
-     console.log("Retrieved form: " + form.name); 
+     console.log("Retrieved form: " + form.name + " = " + form.description); 
      var options = {
         "act": "list",
         "type": "cliente", // Entity/Collection name
@@ -30,8 +30,8 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
      mbaasApi.db(options, function (err, data) {
         if (err) return res.status(500).json(err);
         console.log(JSON.stringify(data));
+        return res.json(form);
      });
-     return res.json(form);
     });
   } else {
     next();
