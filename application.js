@@ -61,7 +61,8 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
       });
       
       // run async tasks and return
-      async.parallel(asyncTask, function(){
+      async.parallel(asyncTask, function(err, results){
+        if (err) return res.status(500).json(err);
         console.log(JSON.stringify(form));
         return res.json(form);
       });
