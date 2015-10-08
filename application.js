@@ -37,9 +37,9 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
             };
             mbaasApi.db(params, function (err, data) {
               if (err) return res.status(500).json(err);
-              console.log("Results " + JSON.stringify(data));
+              //console.log("Results " + JSON.stringify(data));
               options = _.map(data.list, function(row, index, list){
-                console.log(JSON.stringify(row));
+                //console.log(JSON.stringify(row));
                 return { "checked" : false, "label" : row.fields.value };
               });
               console.log(JSON.stringify(options));
@@ -48,6 +48,7 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
           }
         });
       });
+      console.log(JSON.stringify(form));
       return res.json(form);
     });
   } else {
