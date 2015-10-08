@@ -72,6 +72,13 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
   }
 });
 
+var submissionEventListener = new events.EventEmitter();
+submissionEventListener.on('submissionComplete', function(submission){
+  console.log('New submission received: ');
+  console.log(submission);
+});
+mbaasApi.forms.registerListener(submissionEventListener, function(err){});
+
 // Note: the order which we add middleware to Express here is important!
 app.use('/sys', mbaasExpress.sys(securableEndpoints));
 app.use('/mbaas', mbaasExpress.mbaas);
