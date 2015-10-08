@@ -3,6 +3,7 @@ var express = require('express');
 var mbaasExpress = mbaasApi.mbaasExpress();
 var cors = require('cors');
 var _ = require('underscore');
+var async = require('async');
 
 // list the endpoints which you want to make securable here
 var securableEndpoints;
@@ -26,35 +27,44 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
       
       console.log("Retrieved form: " + form.name + " = " + form.description); 
       
+      var asyncTasks = [];
+      
       _.each(form.pages, function(page, index, list){
-        var fields = _.map(page.fields, function(field, index, list){
-          if (field.type == 'dropdown') {
-            return field.fieldCode.toLowerCase().slice(1);
-          }
+        _.each(page.fields, function(field, index, list){
+          if (field.type != 'dropdown') return;
+          asyncTasks.push(function(callback){
+            
+            var fieldCode = field.fieldCode.toLowerCase().slice(1);
+            
+            console.log("Searching data for " + fieldCode);
+            
+            var options = [];
+            
+            var params = {
+              "act": "list",
+              "type": fieldCode, // Entity/Collection name
+            };
+            
+            mbaasApi.db(params, function (err, data) {
+              if (err) return res.status(500).json(err);
+              //console.log("Results " + JSON.stringify(data));
+              options = _.map(data.list, function(row, index, list){
+                //console.log(JSON.stringify(row));
+                return { "checked" : false, "label" : row.fields.value };
+              });
+              //console.log(JSON.stringify(options));
+              field.fieldOptions.definition.options = options;
+              
+              callback();
+            });
+          });
         });
       });
       
-      console.log("Searching data for " + fieldCode);
-      
-      var options = [];
-      var params = {
-        "act": "list",
-        "type": fieldCode, // Entity/Collection name
-      };
-      mbaasApi.db(params, function (err, data) {
-        if (err) return res.status(500).json(err);
-        //console.log("Results " + JSON.stringify(data));
-        options = _.map(data.list, function(row, index, list){
-          //console.log(JSON.stringify(row));
-          return { "checked" : false, "label" : row.fields.value };
-        });
-        //console.log(JSON.stringify(options));
-        return options;
-        field.fieldOptions.definition.options = options;
+      async.parallel(asyncTask, function(){
+        console.log(JSON.stringify(form));
+        return res.json(form);
       });
-
-      console.log(JSON.stringify(form));
-      return res.json(form);
     });
   } else {
     next();
