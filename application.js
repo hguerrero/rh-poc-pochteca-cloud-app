@@ -30,7 +30,7 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
      mbaasApi.db(options, function (err, data) {
         if (err) return res.status(500).json(err);
         //console.log(JSON.stringify(data));
-        var field = form.pages[1].fields[0].fieldOptions;
+        var field = form.pages[1].fields[0].fieldOptions.definition.options;
         console.log(JSON.stringify(field));
         return res.json(form);
      });
