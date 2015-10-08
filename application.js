@@ -19,13 +19,13 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
   console.log("Lookup form: " + req.params.formId); 
   if (req.params.formId == '560c2d68d1596bad10c427d3') {
     mbaasApi.forms.getForm({
-       "_id": req.params.formId
-     }, function (err, form) {
-       if (err) return res.status(500).json(err);
-       form.pages.splice(1,1);
-       console.log("Retrieved form: " + JSON.stringify(form)); 
-       return res.json(form);
-     });
+     "_id": req.params.formId
+    }, function (err, form) {
+     if (err) return res.status(500).json(err);
+     form.pages.splice(1,1);
+     console.log("Retrieved form: " + JSON.stringify(form)); 
+     return res.json(form);
+    });
   } else {
     next();
   }
