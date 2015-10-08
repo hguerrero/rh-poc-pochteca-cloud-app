@@ -38,11 +38,12 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
             mbaasApi.db(params, function (err, data) {
               if (err) return res.status(500).json(err);
               console.log("Results " + JSON.stringify(data));
-              options = _.map(data, function(row, index, list){
+              options = _.map(data.list, function(row, index, list){
                 console.log(JSON.stringify(row));
-                return { "checked" : false, "label" : row.value };
+                return { "checked" : false, "label" : row.fields.value };
               });
               console.log(JSON.stringify(options));
+              field.fieldOptions.definition.options = options;
             });
           }
         });
