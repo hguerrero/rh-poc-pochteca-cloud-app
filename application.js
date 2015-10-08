@@ -29,7 +29,9 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
      };
      mbaasApi.db(options, function (err, data) {
         if (err) return res.status(500).json(err);
-        console.log(JSON.stringify(data));
+        //console.log(JSON.stringify(data));
+        var field = form.page[1].fields[0].fieldOptions;
+        console.log(JSON.stringify(field));
         return res.json(form);
      });
     });
