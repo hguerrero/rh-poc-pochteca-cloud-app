@@ -47,20 +47,20 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
             
             mbaasApi.db(params, function (err, data) {
               if (err) return res.status(500).json(err);
-              //console.log("Results " + JSON.stringify(data));
+
               options = _.map(data.list, function(row, index, list){
-                //console.log(JSON.stringify(row));
                 return { "checked" : false, "label" : row.fields.value };
               });
-              //console.log(JSON.stringify(options));
               field.fieldOptions.definition.options = options;
               
+              // Async call is done, alert via callback
               callback();
             });
           });
         });
       });
       
+      // run async tasks and return
       async.parallel(asyncTask, function(){
         console.log(JSON.stringify(form));
         return res.json(form);
