@@ -46,7 +46,7 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
             };
             
             mbaasApi.db(params, function (err, data) {
-              if (err) return res.status(500).json(err);
+              if (err) callback(err);
 
               options = _.map(data.list, function(row, index, list){
                 return { "checked" : false, "label" : row.fields.value };
