@@ -22,26 +22,30 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
     mbaasApi.forms.getForm({
      "_id": req.params.formId
     }, function (err, form) {
-     if (err) return res.status(500).json(err);
-     console.log("Retrieved form: " + form.name + " = " + form.description); 
-     var options = {
-        "act": "list",
-        "type": "cliente", // Entity/Collection name
-     };
-     mbaasApi.db(options, function (err, data) {
-        if (err) return res.status(500).json(err);
-        //console.log(JSON.stringify(data));
-        _.each(form.pages, function(page, index, list){
-          _.each(page.fields, function(field, index, list){
-            if (field.type == 'dropdown') {
-              var fieldCode = field.fieldCode.toLowerCase();
-              var options = field.fieldOptions.definition.options;
-              console.log(JSON.stringify(options));
-            }
-          });
+      if (err) return res.status(500).json(err);
+      console.log("Retrieved form: " + form.name + " = " + form.description); 
+      _.each(form.pages, function(page, index, list){
+        _.each(page.fields, function(field, index, list){
+          if (field.type == 'dropdown') {
+            var fieldCode = field.fieldCode.toLowerCase();
+            //var options = field.fieldOptions.definition.options;
+            var options = [];
+            var params = {
+              "act": "list",
+              "type": fieldCode.slice(1,fieldCode.length - 1), // Entity/Collection name
+            };
+            mbaasApi.db(params, function (err, data) {
+              if (err) return res.status(500).json(err);
+              //console.log(JSON.stringify(data));
+              _.each(data, function(row, index, list){
+                options.push({ "checked" : false, "label" : row.value });
+              });
+            });
+            console.log(JSON.stringify(options));
+          }
         });
-        return res.json(form);
-     });
+      });
+      return res.json(form);
     });
   } else {
     next();
