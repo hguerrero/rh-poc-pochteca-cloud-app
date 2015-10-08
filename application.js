@@ -23,31 +23,36 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
      "_id": req.params.formId
     }, function (err, form) {
       if (err) return res.status(500).json(err);
+      
       console.log("Retrieved form: " + form.name + " = " + form.description); 
+      
       _.each(form.pages, function(page, index, list){
-        _.each(page.fields, function(field, index, list){
+        var fields = _.map(page.fields, function(field, index, list){
           if (field.type == 'dropdown') {
-            var fieldCode = field.fieldCode.toLowerCase().slice(1);
-            //var options = field.fieldOptions.definition.options;
-            console.log("Searching data for " + fieldCode);
-            var options = [];
-            var params = {
-              "act": "list",
-              "type": fieldCode, // Entity/Collection name
-            };
-            mbaasApi.db(params, function (err, data) {
-              if (err) return res.status(500).json(err);
-              //console.log("Results " + JSON.stringify(data));
-              options = _.map(data.list, function(row, index, list){
-                //console.log(JSON.stringify(row));
-                return { "checked" : false, "label" : row.fields.value };
-              });
-              console.log(JSON.stringify(options));
-              field.fieldOptions.definition.options = options;
-            });
+            return field.fieldCode.toLowerCase().slice(1);
           }
         });
       });
+      
+      console.log("Searching data for " + fieldCode);
+      
+      var options = [];
+      var params = {
+        "act": "list",
+        "type": fieldCode, // Entity/Collection name
+      };
+      mbaasApi.db(params, function (err, data) {
+        if (err) return res.status(500).json(err);
+        //console.log("Results " + JSON.stringify(data));
+        options = _.map(data.list, function(row, index, list){
+          //console.log(JSON.stringify(row));
+          return { "checked" : false, "label" : row.fields.value };
+        });
+        //console.log(JSON.stringify(options));
+        return options;
+        field.fieldOptions.definition.options = options;
+      });
+
       console.log(JSON.stringify(form));
       return res.json(form);
     });
