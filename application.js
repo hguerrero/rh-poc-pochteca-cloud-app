@@ -22,8 +22,18 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
      "_id": req.params.formId
     }, function (err, form) {
      if (err) return res.status(500).json(err);
-     form.pages.splice(1,1);
-     console.log("Retrieved form: " + JSON.stringify(form)); 
+     var options = {
+        "act": "list",
+        "type": "cliente", // Entity/Collection name
+     };
+     $fh.db(options, function (err, data) {
+        if (err) {
+          console.error("Error " + err);
+        } else {
+          console.log(JSON.stringify(data));
+        }
+     });
+     console.log("Retrieved form: " + form.getName()); 
      return res.json(form);
     });
   } else {
