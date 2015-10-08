@@ -2,6 +2,7 @@ var mbaasApi = require('fh-mbaas-api');
 var express = require('express');
 var mbaasExpress = mbaasApi.mbaasExpress();
 var cors = require('cors');
+var _ = require('underscore');
 
 // list the endpoints which you want to make securable here
 var securableEndpoints;
@@ -30,8 +31,12 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
      mbaasApi.db(options, function (err, data) {
         if (err) return res.status(500).json(err);
         //console.log(JSON.stringify(data));
-        var field = form.pages[1].fields[0].fieldOptions.definition.options;
-        console.log(JSON.stringify(field));
+        _.each(form.pages, function(page, index, list){
+          _.each(page.fields, function(field, index, list){
+            var options = field.fieldOptions.definition.options;
+            console.log(JSON.stringify(options));
+          });
+        });
         return res.json(form);
      });
     });
