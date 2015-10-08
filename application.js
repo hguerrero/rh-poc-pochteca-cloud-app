@@ -18,6 +18,11 @@ var app = express();
 app.use(cors());
 
 // Note: add this first to override mbaas api
+app.get('/forms/:appId/:formId/submitFormData', function(req, res, next){
+  console.log("submission " + JSON.stringify(req));
+  next();
+});
+
 app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
   console.log("Lookup form: " + req.params.formId); 
   if (req.params.formId == '560c2d68d1596bad10c427d3') {
