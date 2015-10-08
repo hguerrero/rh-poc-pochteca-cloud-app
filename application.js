@@ -40,8 +40,8 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
               _.each(data, function(row, index, list){
                 options.push({ "checked" : false, "label" : row.value });
               });
+              console.log(JSON.stringify(options));
             });
-            console.log(JSON.stringify(options));
           }
         });
       });
