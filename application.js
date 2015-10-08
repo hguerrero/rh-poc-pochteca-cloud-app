@@ -36,8 +36,8 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
             };
             mbaasApi.db(params, function (err, data) {
               if (err) return res.status(500).json(err);
-              //console.log(JSON.stringify(data));
               _.each(data, function(row, index, list){
+                console.log(JSON.stringify(row));
                 options.push({ "checked" : false, "label" : row.value });
               });
               console.log(JSON.stringify(options));
