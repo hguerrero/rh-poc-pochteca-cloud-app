@@ -33,8 +33,11 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
         //console.log(JSON.stringify(data));
         _.each(form.pages, function(page, index, list){
           _.each(page.fields, function(field, index, list){
-            var options = field.fieldOptions.definition.options;
-            console.log(JSON.stringify(options));
+            if (field.type == 'dropdown') {
+              var fieldCode = field.fieldCode.toLowerCase();
+              var options = field.fieldOptions.definition.options;
+              console.log(JSON.stringify(options));
+            }
           });
         });
         return res.json(form);
