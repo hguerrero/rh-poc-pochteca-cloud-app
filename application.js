@@ -26,7 +26,7 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
         "act": "list",
         "type": "cliente", // Entity/Collection name
      };
-     $fh.db(options, function (err, data) {
+     mbaasApi.db(options, function (err, data) {
         if (err) {
           console.error("Error " + err);
         } else {
