@@ -27,18 +27,20 @@ app.get('/mbaas/forms/:appId/:formId', function(req, res, next) {
       _.each(form.pages, function(page, index, list){
         _.each(page.fields, function(field, index, list){
           if (field.type == 'dropdown') {
-            var fieldCode = field.fieldCode.toLowerCase();
+            var fieldCode = field.fieldCode.toLowerCase().slice(1,fieldCode.length - 1);
             //var options = field.fieldOptions.definition.options;
             var options = [];
+            console.log("Searching data for " + fielCode);
             var params = {
               "act": "list",
-              "type": fieldCode.slice(1,fieldCode.length - 1), // Entity/Collection name
+              "type": fieldCode, // Entity/Collection name
             };
             mbaasApi.db(params, function (err, data) {
               if (err) return res.status(500).json(err);
-              _.each(data, function(row, index, list){
+              console.log("Results " + JSON.stringify(row));
+              options = _.map(data, function(row, index, list){
                 console.log(JSON.stringify(row));
-                options.push({ "checked" : false, "label" : row.value });
+                return { "checked" : false, "label" : row.value };
               });
               console.log(JSON.stringify(options));
             });
